@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name		Log the FB ticker to remote server
-// @version		0.1
+// @version		0.2
 // @description	Scripts logs the FB ticker to remote server
 // @include		https://www.facebook.com/
 // @exclude		https://www.facebook.com/plugins/*
@@ -41,8 +41,14 @@ function main($){
 			var	$obj = $(obj),
 				objID = $obj.attr("id"),
 				savedID = btoa(objID),
-				savedObj = btoa($obj);
-			printDebugMSG(savedID);		
+				$savedOnIndex = $.inArray(savedID, alreadySavedID);
+				if ($savedOnIndex<0){
+					savedObj = btoa($obj);
+					alreadySavedID.push(savedID);
+					postMyData(savedID, alreadySavedID);
+					printDebugMSG(savedID);		
+				}
 		});
+		$(".pam.tickerMorePager.stat_elem").get(0).scrollIntoView();
 	}
 }
