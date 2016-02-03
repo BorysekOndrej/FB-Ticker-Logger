@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name		Log the FB ticker to remote server
-// @version		0.2
+// @version		0.3
 // @description	Scripts logs the FB ticker to remote server
 // @include		https://www.facebook.com/
 // @exclude		https://www.facebook.com/plugins/*
@@ -22,6 +22,16 @@ function printDebugMSG(msg){
 }
 
 function postMyData(IDtoSave, StoryToSave){
+	GM_xmlhttpRequest({
+	url: "https://scripts.borysek.eu/fbTicker.php",
+	headers: {
+		"Content-Type": "application/x-www-form-urlencoded"
+	},
+	method: "POST",
+	data: "IDtoSave=" + encodeURIComponent (IDtoSave) 
+			+ "&StoryToSave=" + encodeURIComponent (StoryToSave)	   
+	});
+	printDebugMSG(IDtoSave);
 }
 
 
