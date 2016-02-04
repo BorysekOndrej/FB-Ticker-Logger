@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name		Log the FB ticker to remote server
-// @version		0.3
+// @version		0.4
 // @description	Scripts logs the FB ticker to remote server
 // @include		https://www.facebook.com/
 // @exclude		https://www.facebook.com/plugins/*
@@ -16,9 +16,14 @@ var	settings = {
 	},
 
 alreadySavedID = [];
+listLoaded = false;
 
 function printDebugMSG(msg){
 	if(settings.debug === true){ console.log(msg); }
+}
+
+function loadAlreadySaved(){
+	listLoaded = true;
 }
 
 function postMyData(IDtoSave, StoryToSave){
@@ -36,6 +41,7 @@ function postMyData(IDtoSave, StoryToSave){
 
 
 $(document).ready(function($) {
+	loadAlreadySaved();
 	printDebugMSG("GM script started");
 	setInterval(function(){
 			main($);
@@ -46,7 +52,7 @@ $(document).ready(function($) {
 function main($){
 	printDebugMSG("main started");
 	printDebugMSG(alreadySavedID.length);
-	if($(".uiScrollableAreaContent")){
+	if($(".uiScrollableAreaContent") && listLoaded == true){
 		$(".fbFeedTickerStory").each(function(i, obj){
 			var	$obj = $(obj),
 				objID = $obj.attr("id"),
@@ -55,7 +61,7 @@ function main($){
 				if ($savedOnIndex<0){
 					savedObj = btoa($obj);
 					alreadySavedID.push(savedID);
-					postMyData(savedID, alreadySavedID);
+					postMyData(savedID, savedObj);
 					printDebugMSG(savedID);		
 				}
 		});
