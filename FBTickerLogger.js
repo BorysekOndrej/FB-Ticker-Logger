@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name		Log the FB ticker to remote server
-// @version		0.4
+// @version		0.5
 // @description	Scripts logs the FB ticker to remote server
 // @include		https://www.facebook.com/
 // @exclude		https://www.facebook.com/plugins/*
@@ -23,7 +23,21 @@ function printDebugMSG(msg){
 }
 
 function loadAlreadySaved(){
-	listLoaded = true;
+	printDebugMSG("sending request");
+	GM_xmlhttpRequest({
+		url: "https://scripts.borysek.eu/fbTickerLoad.php?load=true",
+		method: "GET",
+			onload: function(response) {
+				var obj = JSON.parse(response.responseText);
+				var aParsedID;
+			for (var i = obj.length - 1; i >= 0; i--) {
+				aParsedID = decodeURIComponent(obj[i]);
+				alreadySavedID[i]=aParsedID;
+				printDebugMSG("parsing");
+			};
+			listLoaded = true;
+			}		
+	});
 }
 
 function postMyData(IDtoSave, StoryToSave){
