@@ -27,16 +27,16 @@ function loadAlreadySaved(){
 	GM_xmlhttpRequest({
 		url: "https://scripts.borysek.eu/fbTickerLoad.php?load=true",
 		method: "GET",
-			onload: function(response) {
-				var obj = JSON.parse(response.responseText);
-				var aParsedID;
+		onload: function(response) {
+			var obj = JSON.parse(response.responseText);
+			var aParsedID;
 			for (var i = obj.length - 1; i >= 0; i--) {
 				aParsedID = decodeURIComponent(obj[i]);
 				alreadySavedID[i]=aParsedID;
 				printDebugMSG("parsing");
 			};
 			listLoaded = true;
-			}		
+		}		
 	});
 }
 
@@ -48,9 +48,11 @@ function postMyData(IDtoSave, StoryToSave){
 	},
 	method: "POST",
 	data: "IDtoSave=" + encodeURIComponent (IDtoSave) 
-			+ "&StoryToSave=" + encodeURIComponent (StoryToSave)	   
+			+ "&StoryToSave=" 	+ encodeURIComponent (StoryToSave),
+	onload: function(response) {
+		printDebugMSG(IDtoSave);
+	}
 	});
-	printDebugMSG(IDtoSave);
 }
 
 
@@ -64,7 +66,7 @@ $(document).ready(function($) {
 
 
 function main($){
-	printDebugMSG("main started");
+//	printDebugMSG("main started");
 	printDebugMSG(alreadySavedID.length);
 	if($(".uiScrollableAreaContent") && listLoaded == true){
 		$(".fbFeedTickerStory").each(function(i, obj){
@@ -80,5 +82,5 @@ function main($){
 				}
 		});
 		$(".pam.tickerMorePager.stat_elem").get(0).scrollIntoView();
-	}
+	}		
 }
